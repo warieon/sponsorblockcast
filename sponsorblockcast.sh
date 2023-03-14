@@ -101,8 +101,8 @@ watch () {
 
     fi
 
-    supported_cmd=$(echo "$status" | grep -oP "\"supportedMediaCommands\":\K[0-9]+")
-    if [ -n "$supported_cmd" ] && [ $(( supported_cmd & 0x2 )) -eq $(( 0x0 )) ]; then
+    custom_player_state=$(echo "$status" | grep -oP "\"customData\":{\"playerState\":\K[0-9]+")
+    if [ -n "$custom_player_state" ] && [ $custom_player_state -eq 1081 ]; then
       #Ad is skippable
       echo "Skipping skippable ad"
       go-chromecast -u "$uuid" skipad
@@ -138,4 +138,3 @@ do
   done < devices
   sleep "$SBCSCANINTERVAL"
 done
-
