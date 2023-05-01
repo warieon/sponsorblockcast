@@ -101,11 +101,12 @@ watch () {
 
     fi
 
-    custom_player_state=$(echo "$status" | grep -oP "\"customData\":{\"playerState\":\K[0-9]+")
-    if [ -n "$custom_player_state" ] && [ $custom_player_state -eq 1081 ]; then
+# can this segment have a while loop added to support skipping the add?
+    supported_cmd=$(echo "$status" | grep -oP "\"supportedMediaCommands\":\K[0-9]+")
+    if [ -n "$supported_cmd" ] && [ $(( supported_cmd & 0x2 )) -eq $(( 0x0 )) ]; then
       #Ad is skippable
       echo "Skipping skippable ad"
-      go-chromecast -u "$uuid" skipad
+      go-chromecast -u "$uuid" skipAd
     fi
   done;
 }
